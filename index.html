@@ -5,28 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Get PKH</title>
     <script type="module" async> 
-     
-    import { Lucid, Blockfrost } from "https://unpkg.com/lucid-cardano@0.10.7/web/mod.js"
+        import { Lucid, Blockfrost, getAddressDetails } from "https://unpkg.com/lucid-cardano@0.10.7/web/mod.js"
 
-    const lucid = await Lucid.new(
-        new Blockfrost("https://cardano-preview.blockfrost.io/api/v0", "previewO9n6QGdntrvMVqrV217bMde8szkK7qIn"),
-        "Preview",
-    );
-  
-    // Assumes you are in a browser environment
-    const api = await window.cardano.nami.enable();
-    lucid.selectWallet(api);
-
-    async function getPKH() {
-        console.log("getPKH");
-        const addr = await lucid.wallet.address();
-        const details = await Lucid.getAddressDetails(addr);
-        return details.paymentCredential.hash;
-        console.log(details.paymentCredential.hash);
-    }
-
-    document.getElementById("getPKH").onclick = getPKH;
+        const lucid = await Lucid.new(
+            new Blockfrost("https://cardano-preview.blockfrost.io/api/v0", "<ProjectID>"),
+            "Preview",
+        );
     
+        const api = await window.cardano.nami.enable();
+        lucid.selectWallet(api);
+
+        async function getPKH() {
+            const addr = await lucid.wallet.address();
+            const details = await getAddressDetails(addr);
+            document.getElementById("pkh").innerHTML = details.paymentCredential.hash;
+        }
+
+        document.getElementById("getPKH").onclick = getPKH;
     </script>
 </head>
 <body>
@@ -35,7 +30,5 @@
         <p>Click the button to show your Plublic Key Hash:</p>
         <p id="pkh"></p>
     </div>
-
-    
 </body>
 </html>
